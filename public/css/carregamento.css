@@ -1,0 +1,106 @@
+/* Ponte · ecrã de carregamento com o emblema da Ponte em vidro
+   Aparece ao abrir a app e ao entrar na conta (ver js/nucleo/carregamento.js) */
+
+.splash {
+  position: fixed; inset: 0; z-index: 3000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;
+  background: radial-gradient(70vmax 70vmax at 50% 42%, #2B4426 0%, #1F301B 55%, #172412 100%);
+  transition: opacity .45s ease, visibility .45s;
+}
+
+.splash[hidden] { display: none; }
+
+.splash.out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* a bolinha: entra desfocada e encolhida, assenta com um pequeno balanço líquido e fica a respirar */
+.splash-orb {
+  position: relative; width: min(36vw, 150px); aspect-ratio: 1; border-radius: 50%;
+  animation: orb-in 1.15s cubic-bezier(.2, .9, .25, 1.1) both, orb-breathe 2.8s ease-in-out 1.15s infinite;
+}
+
+.splash-orb svg { position: relative; z-index: 1; display: block; width: 100%; height: 100%; border-radius: 50%; }
+
+/* as faixas de cor entram a fluir, uma a uma, de baixo para cima */
+.splash-orb .band { transform-box: view-box; animation: band-in 1s cubic-bezier(.2, .8, .2, 1) both; }
+
+.splash-orb .b1 { animation-delay: .1s; }
+
+.splash-orb .b2 { animation-delay: .2s; }
+
+.splash-orb .b3 { animation-delay: .3s; }
+
+.splash-orb .b4 { animation-delay: .4s; }
+
+.splash-orb .b5 { animation-delay: .5s; }
+
+/* auréola de cor por trás, como a refração nos rebordos do vidro */
+.splash-orb::before {
+  content: ''; position: absolute; inset: -2px; z-index: 0; border-radius: 50%;
+  box-shadow: -4px -3px 16px rgba(88, 192, 224, .5), 5px 6px 18px rgba(125, 204, 93, .35), 0 30px 60px -18px rgba(0, 0, 0, .65);
+  animation: fade-in .8s ease .5s both;
+}
+
+/* vidro por cima: brilho, rebordo claro e sombra interior */
+.splash-orb::after {
+  content: ''; position: absolute; inset: 0; z-index: 2; border-radius: 50%; pointer-events: none;
+  background:
+    radial-gradient(circle at 31% 24%, rgba(255, 255, 255, .7), rgba(255, 255, 255, .14) 26%, transparent 50%),
+    radial-gradient(circle at 72% 84%, rgba(255, 255, 255, .22), transparent 38%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 255, 255, .4),
+    inset 7px 9px 20px rgba(255, 255, 255, .28),
+    inset -9px -12px 24px rgba(8, 28, 16, .38);
+  animation: fade-in .9s ease .35s both;
+}
+
+/* a ponte desenha-se depois de as faixas assentarem */
+.splash-bridge path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: bridge-draw .9s cubic-bezier(.4, 0, .2, 1) .6s forwards; }
+
+@keyframes bridge-draw { to { stroke-dashoffset: 0; } }
+
+/* reflexo que atravessa a bolinha enquanto espera */
+.splash-sheen { position: absolute; inset: 0; z-index: 3; border-radius: 50%; overflow: hidden; pointer-events: none; }
+
+.splash-sheen::after {
+  content: ''; position: absolute; inset: -20%;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .45) 49%, rgba(255, 255, 255, .08) 53%, transparent 62%);
+  transform: translateX(-90%); animation: sheen 2.8s ease-in-out 1s infinite;
+}
+
+.splash-word { text-align: center; color: #F4F1E8; animation: word-in .8s ease .65s both; }
+
+.splash-word b { display: block; font-family: var(--title); font-weight: 400; font-size: 1.35rem; letter-spacing: .02em; }
+
+/* a sair: a bolinha cresce e dissolve-se */
+.splash.out .splash-orb { animation: orb-out .45s ease forwards; }
+
+.splash.out .splash-word { animation: fade-out .3s ease forwards; }
+
+@keyframes orb-in {
+  0% { transform: scale(.35); filter: blur(14px); opacity: 0; }
+  55% { transform: scale(1.06, .95); filter: blur(0); opacity: 1; }
+  75% { transform: scale(.97, 1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes orb-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035, 1.015); }
+}
+
+@keyframes band-in { from { transform: translate(-30px, 36px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+@keyframes sheen { 0% { transform: translateX(-90%); } 60%, 100% { transform: translateX(90%); } }
+
+@keyframes word-in { from { opacity: 0; transform: translateY(8px); } }
+
+@keyframes orb-out { to { transform: scale(1.15); filter: blur(6px); opacity: 0; } }
+
+@keyframes fade-in { from { opacity: 0; } }
+
+@keyframes fade-out { to { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-orb, .splash-orb *, .splash-orb::before, .splash-orb::after, .splash-sheen::after, .splash-word { animation: none !important; }
+  .splash-bridge path { stroke-dashoffset: 0; }
+}

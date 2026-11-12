@@ -1,0 +1,101 @@
+/* Ponte · movimento: animações discretas ao estilo Apple
+   Curtas, suaves e só onde ajudam a perceber o que mudou. Quem pede menos movimento não as vê.
+   O conteúdo de cada ecrã anima quando o <main> tem a classe .enter (ver enterMotion em js/nucleo/router.js). */
+
+:root {
+  --ease-out: cubic-bezier(.2, .8, .2, 1);   /* entrada suave */
+  --ease-spring: cubic-bezier(.32, .72, 0, 1); /* folhas e toques, como no iOS */
+}
+
+/* ---------- conteúdo de cada ecrã: sobe ligeiramente e aparece, em cascata ---------- */
+main.enter > :not(.tabs):not(.loading) { animation: rise .5s var(--ease-out) both; }
+
+main.enter > :nth-child(2) { animation-delay: .04s; }
+
+main.enter > :nth-child(3) { animation-delay: .08s; }
+
+main.enter > :nth-child(4) { animation-delay: .12s; }
+
+main.enter > :nth-child(5) { animation-delay: .16s; }
+
+main.enter > :nth-child(n+6) { animation-delay: .2s; }
+
+/* barras de progresso e do percurso enchem-se ao entrar */
+main.enter .progress > i, main.enter .journey .bar { animation: fill .9s var(--ease-out) .2s both; transform-origin: left center; }
+
+/* título do topo: troca com um pequeno fade ao mudar de ecrã */
+.topbar-hero.enter > * { animation: rise .45s var(--ease-out) both; }
+
+.topbar-hero.enter > h1 { animation-delay: .03s; }
+
+.topbar-hero.enter > p { animation-delay: .06s; }
+
+/* ---------- toque: o que se carrega encolhe um pouco e volta ---------- */
+.btn, .filters button, .tabs button, .demo-accounts button, .icon-btn, .sidenav nav a, .bottomnav a, .scale span, .option {
+  transition: transform .25s var(--ease-spring), background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.btn:active, .filters button:active, .tabs button:active, .demo-accounts button:active, .icon-btn:active, .scale span:active { transform: scale(.96); }
+
+.sidenav nav a:active { transform: scale(.98); }
+
+.nav-ico { transition: background-color .25s ease, transform .3s var(--ease-spring); }
+
+.bottomnav a:active .nav-ico { transform: scale(.9); }
+
+/* o ícone do separador ativo dá um pequeno salto */
+.bottomnav a.active .nav-ico svg, .sidenav nav a.active svg { animation: pop .4s var(--ease-spring); }
+
+/* ---------- separadores: a pastilha branca desliza para o separador escolhido, como no iOS ---------- */
+.tabs { position: relative; }
+
+.tabs button { position: relative; z-index: 1; }
+
+.tabs.has-indicator::before {
+  content: ''; position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 0;
+  width: var(--tab-w, 0); transform: translateX(var(--tab-x, 0)); border-radius: 999px;
+  background: rgba(255, 255, 255, .92); box-shadow: 0 2px 8px -2px rgba(36, 54, 31, .14);
+  transition: transform .45s var(--ease-spring), width .45s var(--ease-spring);
+}
+
+.tabs.no-anim::before { transition: none; }
+
+.tabs.has-indicator button.active { background: transparent; box-shadow: none; }
+
+/* ---------- janelas e avisos ---------- */
+.modal-back { animation: fade .25s ease; }
+
+.modal { animation: sheet-up .5s var(--ease-spring); }
+
+@media (min-width: 640px) {
+  .modal { animation: zoom-in .35s var(--ease-spring); }
+}
+
+.toast { animation: toast-in .45s var(--ease-spring); }
+
+/* ---------- carregamento entre ecrãs: sem símbolo; o texto só aparece se demorar ---------- */
+.loading .spinner { display: none; }
+
+.loading { animation: fade .3s ease .6s both; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+
+@keyframes fill { from { transform: scaleX(0); } }
+
+@keyframes pop { from { transform: scale(.82); } }
+
+@keyframes fade { from { opacity: 0; } }
+
+@keyframes sheet-up { from { transform: translateY(100%); } }
+
+@keyframes zoom-in { from { opacity: 0; transform: scale(.96); } }
+
+@keyframes toast-in { from { opacity: 0; transform: translate(-50%, 12px) scale(.96); } to { transform: translate(-50%, 0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  main.enter > *, main.enter .progress > i, main.enter .journey .bar, .topbar-hero.enter > *,
+  .bottomnav a.active .nav-ico svg, .sidenav nav a.active svg, .modal, .modal-back, .toast { animation: none !important; }
+  .btn:active, .filters button:active, .tabs button:active, .demo-accounts button:active, .icon-btn:active, .scale span:active,
+  .sidenav nav a:active, .bottomnav a:active .nav-ico { transform: none; }
+  .tabs.has-indicator::before { transition: none; }
+}

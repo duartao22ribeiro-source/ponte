@@ -34,7 +34,7 @@ async function pHome(main) {
   if (e.phase === 'integrar' && e.departure) { const n = daysUntil(e.departure); sub = `Estás em ${e.territory_name} · ${n > 0 ? `faltam ${n} dias de estadia` : 'último dia de estadia'}`; }
   if (e.phase === 'mudar' && d.followup) sub = `Mês ${Math.max(1, d.followup.month)} de 6 de acompanhamento`;
   if (e.phase === 'decidir') sub = 'Fim do acompanhamento';
-  setHero(`Olá, ${firstName(S.me.name)}`, sub, `Fase: ${ph.label}`);
+  setHero(`Olá, ${firstName(S.me.name)}`, sub);
 
   const next = [];
   if (e.phase === 'preparar') {

@@ -1,5 +1,7 @@
 # Ponte · Rural Move
 
+<img src="public/icons/ponte-logo.svg" alt="Ponte · by Rural Move" width="320">
+
 PWA mobile-first do serviço **Ponte para a Fixação**. Liga o participante, o anfitrião local e a equipa da Rural Move, desde a semana antes da estadia até à decisão de ficar.
 
 **Primeira vez?** Segue o [GUIA.md](GUIA.md): GitHub, Vercel e trabalho em equipa, passo a passo.

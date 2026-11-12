@@ -6,7 +6,7 @@
 async function pDecidir(main) {
   const d = await overview();
   const e = d.enrollment, dec = d.decision, tm = d.my_testimonial;
-  setHero('Decidir', d.followup ? `Fim do acompanhamento: ${fmtDate(d.followup.end)}` : '', 'Fase 4 · Depois');
+  setHero('Decidir', d.followup ? `Fim do acompanhamento: ${fmtDate(d.followup.end)}` : '');
   let html = phaseIndex(e.phase) < 3 && !dec ? `<div class="notice">Esta fase chega no fim do acompanhamento${d.followup ? ` (${fmtDate(d.followup.end)})` : ''}. Se já sabes o que vais fazer, podes registar a tua decisão agora.</div>` : '';
   if (dec) {
     html += `<div class="card dark"><div class="eyebrow" style="color:var(--accent)">A tua decisão</div><h2>${esc(DECISIONS[dec.choice].label)}</h2>

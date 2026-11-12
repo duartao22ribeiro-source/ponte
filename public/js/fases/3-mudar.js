@@ -53,7 +53,7 @@ function bindPlan(root, pid, plan) {
 async function pMudar(main) {
   const d = await overview();
   const e = d.enrollment, f = d.followup;
-  setHero('Mudar', f ? `Acompanhamento até ${fmtDate(f.end)}` : 'Até 6 meses depois da estadia', 'Fase 3 · Meses 1 a 6');
+  setHero('Mudar', f ? `Acompanhamento até ${fmtDate(f.end)}` : 'Até 6 meses depois da estadia');
   const tab = tabsHTML('mudar', [['plano', 'Plano'], ['casas', 'Casas'], ['apoios', 'Apoios da câmara'], ['visitas', 'Visitas']]);
   const plan = d.plan;
   let head = phaseNotice(e, 'mudar');

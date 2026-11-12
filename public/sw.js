@@ -1,7 +1,7 @@
 // Service worker: app shell em cache; API sempre pela rede.
-const CACHE = 'ponte-v7';
+const CACHE = 'ponte-v8';
 // Os restantes CSS/JS entram na cache à medida que são pedidos (não é preciso listá-los aqui).
-const SHELL = ['/', '/css/base.css', '/js/main.js', '/manifest.webmanifest', '/icons/icon.svg'];
+const SHELL = ['/', '/css/base.css', '/js/main.js', '/manifest.webmanifest', '/icons/ponte.svg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

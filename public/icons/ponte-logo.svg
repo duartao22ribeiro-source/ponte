@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 100">
+  <title>Ponte · by Rural Move</title>
+  <defs><clipPath id="logo-c"><circle cx="50" cy="50" r="50"/></clipPath></defs>
+  <g clip-path="url(#logo-c)">
+    <rect width="100" height="100" fill="#4A88B0"/>
+    <path d="M80 -5 L80 11 C70 20 70 33 77 43 C83 55 88 68 89 82 L85 110 L-10 110 L-10 -10 Z" fill="#6CCDEE"/>
+    <path d="M37 -10 L38 1 C41 18 48 30 58 39 C70 50 80 62 85 86 L80 110 L-10 110 L-10 -10 Z" fill="#CDEEF8"/>
+    <path d="M15 -10 L18 12 C20 28 26 38 37 44 C55 54 72 60 80 88 L76 110 L-10 110 L-10 -10 Z" fill="#86C96A"/>
+    <path d="M-10 43 L1 43 C15 45 28 50 40 56 C56 64 68 72 77 93 L72 110 L-10 110 Z" fill="#68A06C"/>
+    <path d="M-10 66 L3 68 C14 73 26 74 40 74 C55 74 66 80 76 95 L70 110 L-10 110 Z" fill="#5E7A5E"/>
+    <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+      <!-- separação entre o verde-claro e o céu, de cima até à ponte -->
+      <path d="M18 12 C20 28 26 38 37 44" stroke-width="1.1"/>
+      <!-- ponte: arco, guarda com pilares e tabuleiro que continua pelo vale -->
+      <path d="M-2 61 Q50 21 102 61" stroke-width="2.8"/>
+      <path d="M-2 61 Q50 41 102 61" stroke-width="1.6"/>
+      <path d="M29 44.3 V52.6 M49 41 V51 M70 43.9 V52.5" stroke-width="1.8"/>
+      <path d="M-2 63 C20 58 40 56 54 57 C68 58 78 68 83 87" stroke-width="2.6"/>
+    </g>
+  </g>
+  <g fill="#3E6239" font-family="Lexend, 'Helvetica Neue', Arial, sans-serif">
+    <text x="122" y="60" font-size="54" font-weight="600" letter-spacing="1.5">PONTE</text>
+    <text x="124" y="88" font-size="19" font-weight="500">by Rural Move</text>
+  </g>
+</svg>
