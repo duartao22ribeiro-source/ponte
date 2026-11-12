@@ -1,6 +1,47 @@
 /* Ponte · ficha do destino
    Responsável: Pessoa 2 · Fases 1 e 2 (Preparar e Integrar) (ver EQUIPA.md) */
 
-.speed { display: flex; align-items: baseline; gap: 6px; }
+/* ---------- velocímetro da internet ---------- */
+.internet-body { display: grid; gap: var(--s4); align-items: center; }
 
-.speed .stat { font-size: 2.6rem; }
+@media (min-width: 640px) {
+  .internet-body { grid-template-columns: minmax(220px, 300px) 1fr; gap: var(--s6); }
+}
+
+.gauge { display: block; width: 100%; max-width: 300px; margin: 0 auto; overflow: visible; }
+
+.gauge-track, .gauge-fill { fill: none; stroke-width: 10; stroke-linecap: round; }
+
+.gauge-track { stroke: rgba(255, 255, 255, .12); }
+
+.gauge-fill { stroke: url(#gauge-grad); stroke-dasharray: 100 100; stroke-dashoffset: var(--off); animation: gauge-fill 1.3s cubic-bezier(.34, 1.2, .64, 1) .2s both; }
+
+.gauge-ticks circle { fill: rgba(255, 255, 255, .35); }
+
+.gauge-ticks text { fill: rgba(244, 241, 232, .5); font-size: 7px; font-family: var(--text); text-anchor: middle; dominant-baseline: middle; }
+
+.gauge-needle { transform-box: view-box; transform-origin: 100px 100px; transform: rotate(var(--deg)); animation: gauge-needle 1.3s cubic-bezier(.34, 1.3, .64, 1) .2s both; }
+
+.gauge-needle line { stroke: var(--cream); stroke-width: 3; stroke-linecap: round; }
+
+.gauge-needle circle { fill: var(--cream); }
+
+.gauge-value { fill: var(--cream); font-family: var(--title); font-size: 26px; text-anchor: middle; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+
+.gauge-unit { fill: rgba(244, 241, 232, .6); font-size: 8px; font-family: var(--text); text-anchor: middle; }
+
+.internet-info > * + * { margin-top: var(--s2); }
+
+.internet-info p { margin: 0; }
+
+.internet-up { color: var(--on-dark-muted, #CFD8C6); }
+
+.internet-up b { font-family: var(--title); font-weight: 400; font-size: 1.25rem; color: var(--cream); }
+
+@keyframes gauge-fill { from { stroke-dashoffset: 100; } }
+
+@keyframes gauge-needle { from { transform: rotate(150deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .gauge-fill, .gauge-needle { animation: none; }
+}

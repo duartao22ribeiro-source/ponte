@@ -15,20 +15,46 @@ async function eIndicadores(main) {
   const d = await api('/api/e/kpis');
   const t = d.total;
   setHero('Indicadores', 'Ponte para a Fixação · todos os territórios', 'Equipa Rural Move');
-  const totalPh = d.phases.reduce((s, p) => s + p.n, 0) || 1;
-  const phColors = { preparar: '#4888B0', integrar: '#58C0E0', mudar: '#7DCC5D', decidir: '#3F6038' };
+  const phases = d.phases.map(p => ({ key: p.phase, label: phaseOf(p.phase).label, value: p.n, color: PHASE_COLORS[p.phase] }));
+  const fixedPct = t.participants ? Math.round(t.fixed / t.participants * 100) : 0;
   main.innerHTML = `
-    <div class="grid four">
-      <div class="card"><div class="stat">${t.participants}</div><div class="stat-label">Participantes</div></div>
-      <div class="card"><div class="stat">${pct(t.pondera_pct)}</div><div class="stat-label">Ponderam mudar-se no fim da estadia (4 ou 5)${t.answered ? ` · ${t.pondera} de ${t.answered} respostas` : ''}</div></div>
-      <div class="card"><div class="stat">${t.fixed}</div><div class="stat-label">Pessoas fixadas no prazo de 12 meses</div></div>
-      <div class="card dark"><div class="stat">${money(t.cost_per_fixed)}</div><div class="stat-label">Custo por pessoa fixada</div></div>
+    <div class="grid four kpis">
+      <button type="button" class="card kpi" data-goto="#dash-fases">
+        <span class="kpi-label">Participantes</span>
+        <span class="kpi-value" data-count="${t.participants}">${t.participants}</span>
+        <span class="kpi-strip" aria-hidden="true">${phases.filter(p => p.value).map(p => `<i style="flex:${p.value};background:${p.color}"></i>`).join('')}</span>
+        <span class="kpi-foot">Distribuídos pelas 4 fases</span>
+      </button>
+      <div class="card kpi">
+        <span class="kpi-label">Ponderam mudar-se</span>
+        <div class="kpi-row"><span class="kpi-value" ${t.pondera_pct != null ? `data-count="${t.pondera_pct}" data-fmt="pct"` : ''}>${pct(t.pondera_pct)}</span>${t.pondera_pct != null ? ringHTML(t.pondera_pct) : ''}</div>
+        <span class="kpi-foot">${t.answered ? `${t.pondera} de ${t.answered} respostas no fim da estadia (4 ou 5)` : 'Ainda sem respostas no fim da estadia'}</span>
+      </div>
+      <button type="button" class="card kpi" data-goto="#dash-territorio">
+        <span class="kpi-label">Fixados em 12 meses</span>
+        <span class="kpi-value" data-count="${t.fixed}">${t.fixed}</span>
+        <span class="kpi-bar" aria-hidden="true"><i style="width:${fixedPct}%"></i></span>
+        <span class="kpi-foot">${fixedPct}% dos participantes</span>
+      </button>
+      <div class="card kpi dark">
+        <span class="kpi-label">Custo por pessoa fixada</span>
+        <span class="kpi-value" ${t.cost_per_fixed != null ? `data-count="${t.cost_per_fixed}" data-fmt="money"` : ''}>${money(t.cost_per_fixed)}</span>
+        <span class="kpi-foot">${t.cost ? `${money(t.cost)} de custo total das edições` : 'Custo das edições por indicar'}</span>
+      </div>
     </div>
-    <div class="card" style="margin-top:14px"><h3>Onde estão os participantes</h3>
-      <div style="display:flex;height:14px;border-radius:7px;overflow:hidden;margin:12px 0">${d.phases.map(p => p.n ? `<span title="${phaseOf(p.phase).label}: ${p.n}" style="width:${p.n / totalPh * 100}%;background:${phColors[p.phase]}"></span>` : '').join('')}</div>
-      <div class="row small">${d.phases.map(p => `<span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${phColors[p.phase]};margin-right:6px"></i>${phaseOf(p.phase).label}: <b>${p.n}</b></span>`).join('')}</div>
+    <div class="dash-grid">
+      <div class="card" id="dash-fases">
+        <div class="card-head"><h3>Em que fase estão</h3></div>
+        ${donutHTML(phases)}
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>De onde vêm os participantes</h3></div>
+        <div class="origins"><div class="origins-map" id="origins-map"></div>
+          <div class="origins-legend"><span>Menos</span><span class="heat-scale"></span><span>Mais participantes</span><span class="dest-dot"></span><span>Destino</span></div>
+          ${originsListHTML(d.origins || [])}</div>
+      </div>
     </div>
-    <div class="section-title"><h2>Por território</h2></div>
+    <div class="section-title" id="dash-territorio"><h2>Por território</h2></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th>Território</th>${KPI_HEAD}</tr></thead><tbody>
       ${d.by_territory.map(r => `<tr><td><b>${esc(r.name)}</b><div class="small muted">${esc(r.municipality)}</div></td>${kpiRow(r)}</tr>`).join('')}
     </tbody></table></div></div>
@@ -37,6 +63,10 @@ async function eIndicadores(main) {
       ${d.by_edition.map(r => `<tr><td><b>${esc(r.name)}</b><div class="small muted">${fmtShort(r.start_date)} a ${fmtDate(r.end_date)}</div></td>${kpiRow(r)}</tr>`).join('')}
     </tbody></table></div></div>
     <p class="small muted">Pondera mudar-se: respostas 4 ou 5 à pergunta do fim da estadia, sobre quem respondeu. Fixados: decisão "mudei-me" com data de mudança até 12 meses depois do fim da estadia. Custo por fixado: custo das edições (introduzido à mão em Edições) a dividir pelas pessoas fixadas.</p>`;
+  countUp(main);
+  bindDonut(main, phases);
+  $$('[data-goto]', main).forEach(b => b.onclick = () => $(b.dataset.goto)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  originsMap($('#origins-map', main), d.origins || [], d.destinations || []).then(map => { if (map) S.cleanup.push(() => map.remove()); });
 }
 
 async function eTestemunhos(main) {

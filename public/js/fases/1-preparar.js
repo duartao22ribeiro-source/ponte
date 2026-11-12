@@ -2,6 +2,57 @@
 /* Ponte · ficha do destino, anfitrião, videochamada, embaixadores
    Responsável: Pessoa 2 · Fases 1 e 2 (Preparar e Integrar) (ver EQUIPA.md) */
 
+// ---------- velocímetro da internet ----------
+// Escala como a do Speedtest: as velocidades baixas têm mais espaço, porque é aí que a diferença se sente.
+const SPEED_STOPS = [0, 5, 10, 50, 100, 250, 500, 1000];
+const GAUGE_START = 150, GAUGE_SWEEP = 240; // graus: o arco vai de baixo à esquerda a baixo à direita
+
+function speedFraction(v) {
+  const n = SPEED_STOPS.length - 1;
+  if (!(v > 0)) return 0;
+  if (v >= SPEED_STOPS[n]) return 1;
+  const i = SPEED_STOPS.findIndex(s => s > v) - 1;
+  return (i + (v - SPEED_STOPS[i]) / (SPEED_STOPS[i + 1] - SPEED_STOPS[i])) / n;
+}
+
+
+function speedGauge(down) {
+  const pt = (deg, r) => { const a = deg * Math.PI / 180; return [100 + r * Math.cos(a), 100 + r * Math.sin(a)].map(n => n.toFixed(2)); };
+  const [x1, y1] = pt(GAUGE_START, 80), [x2, y2] = pt(GAUGE_START + GAUGE_SWEEP, 80);
+  const arc = `M${x1} ${y1} A80 80 0 1 1 ${x2} ${y2}`;
+  const f = speedFraction(Number(down));
+  const ticks = SPEED_STOPS.map((s, i) => {
+    const deg = GAUGE_START + GAUGE_SWEEP * i / (SPEED_STOPS.length - 1);
+    const [a, b] = pt(deg, 68), [tx, ty] = pt(deg, 58);
+    return `<circle cx="${a}" cy="${b}" r="1"/><text x="${tx}" y="${ty}">${s}</text>`;
+  }).join('');
+  return `<svg class="gauge" viewBox="0 12 200 140" role="img" aria-label="${down > 0 ? `${down} Mbps de download` : 'Velocidade por testar'}"
+      style="--off:${(100 - f * 100).toFixed(2)};--deg:${(GAUGE_START + GAUGE_SWEEP * f).toFixed(1)}deg">
+    <defs><linearGradient id="gauge-grad" x1="0" x2="1"><stop offset="0" stop-color="#58C0E0"/><stop offset="1" stop-color="#7DCC5D"/></linearGradient></defs>
+    <path class="gauge-track" d="${arc}" pathLength="100"/>
+    <path class="gauge-fill" d="${arc}" pathLength="100"/>
+    <g class="gauge-ticks">${ticks}</g>
+    <g class="gauge-needle"><line x1="100" y1="100" x2="164" y2="100"/><circle cx="100" cy="100" r="5"/></g>
+    <text class="gauge-value" x="100" y="132" data-count="${down > 0 ? Number(down) : ''}">${down > 0 ? esc(down) : '—'}</text>
+    <text class="gauge-unit" x="100" y="146">Mbps · download</text>
+  </svg>`;
+}
+
+// o número do velocímetro conta até ao valor, ao mesmo ritmo do ponteiro
+function countUpGauge(root) {
+  const el = $('.gauge-value[data-count]', root);
+  const to = Number(el?.dataset.count);
+  if (!to || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const t0 = performance.now() + 200, dur = 1100;
+  const step = now => {
+    const k = Math.min(1, Math.max(0, (now - t0) / dur));
+    el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+    if (k < 1) requestAnimationFrame(step);
+  };
+  el.textContent = '0';
+  requestAnimationFrame(step);
+}
+
 // ---------- Fase 1: Preparar ----------
 async function pPreparar(main) {
   const d = await overview();
@@ -14,13 +65,17 @@ async function pPreparar(main) {
     const s = d.destination;
     if (!s) body = `<div class="card">${emptyState('A ficha do destino ainda está a ser preparada pelo anfitrião.')}</div>`;
     else body = `
-      <div class="card dark">
+      <div class="card dark internet">
         <div class="eyebrow" style="color:var(--accent)">Internet testada</div>
-        <div class="speed"><span class="stat">${esc(s.internet_mbps ?? '—')}</span><span>Mbps de download</span></div>
-        ${s.internet_upload_mbps ? `<div class="muted">${esc(s.internet_upload_mbps)} Mbps de upload</div>` : ''}
-        <div class="small muted" style="margin-top:6px">${s.internet_tested_at ? `Último teste a ${fmtDate(s.internet_tested_at)}` : 'Data do teste por indicar'}</div>
-        <div style="margin-top:14px">${s.quiet_space ? '<span class="chip accent">Há espaço silencioso para chamadas</span>' : '<span class="chip warn">Sem espaço silencioso para chamadas</span>'}</div>
-        ${s.quiet_space_notes ? `<p class="small muted" style="margin:8px 0 0">${esc(s.quiet_space_notes)}</p>` : ''}
+        <div class="internet-body">
+          ${speedGauge(s.internet_mbps)}
+          <div class="internet-info">
+            ${s.internet_upload_mbps ? `<p class="internet-up"><b>${esc(s.internet_upload_mbps)}</b> Mbps de upload</p>` : ''}
+            <p class="small muted">${s.internet_tested_at ? `Último teste a ${fmtDate(s.internet_tested_at)}` : 'Data do teste por indicar'}</p>
+            <div>${s.quiet_space ? '<span class="chip accent">Há espaço silencioso para chamadas</span>' : '<span class="chip warn">Sem espaço silencioso para chamadas</span>'}</div>
+            ${s.quiet_space_notes ? `<p class="small muted" style="margin:8px 0 0">${esc(s.quiet_space_notes)}</p>` : ''}
+          </div>
+        </div>
       </div>
       <div class="grid three">
         <div class="card"><h3>Alojamento</h3><p class="small">${esc(s.accommodation || '—')}</p></div>
@@ -69,6 +124,7 @@ async function pPreparar(main) {
   }
 
   main.innerHTML = tab + body;
+  countUpGauge(main);
   const cf = $('#call-form', main);
   if (cf) cf.onsubmit = ev => {
     ev.preventDefault();
