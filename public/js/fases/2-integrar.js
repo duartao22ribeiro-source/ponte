@@ -39,7 +39,7 @@ async function drawMap(el, items, center) {
 async function pIntegrar(main) {
   const d = await overview();
   const e = d.enrollment;
-  setHero('Integrar', e.arrival && e.departure ? `${fmtShort(e.arrival)} a ${fmtShort(e.departure)} · ${e.territory_name}` : e.territory_name, 'Fase 2 · 2 a 4 semanas');
+  setHero('Integrar', e.arrival && e.departure ? `${fmtShort(e.arrival)} a ${fmtShort(e.departure)} · ${e.territory_name}` : e.territory_name);
   const tab = tabsHTML('integrar', [['agenda', 'Agenda'], ['guia', 'Guia local'], ['diario', 'Diário']]);
   let body = phaseNotice(e, 'integrar');
 

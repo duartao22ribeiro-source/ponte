@@ -11,7 +11,7 @@
 
 .date-box b { font-family: var(--title); font-weight: 400; font-size: 1.35rem; }
 
-.date-box small { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.date-box small { font-size: .75rem; font-weight: 500; color: var(--muted); }
 
 .date-box.weekend { background: var(--accent); }
 

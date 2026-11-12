@@ -724,3 +724,154 @@ tr.clickable:hover td { background: rgba(255, 255, 255, .5); }
 }
 
 /* entrada no computador: uma só página fixa, sem scroll nem efeito elástico */
+
+/* =====================================================================
+   Espaço e etiquetas · mais calmo, ao estilo Apple
+   Escala de espaço: usa var(--s1) … var(--s8) em vez de valores soltos.
+   ===================================================================== */
+:root {
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+  --muted: #535E4D;
+}
+
+body { font-size: 17px; line-height: 1.55; }
+
+p { margin: 0 0 var(--s3); }
+
+h1, h2, h3, h4 { letter-spacing: -.025em; margin-bottom: var(--s2); }
+
+h1 { font-size: 2rem; letter-spacing: -.035em; }
+
+h2 { font-size: 1.375rem; }
+
+h3 { font-size: 1.125rem; }
+
+small, .small { font-size: .875rem; }
+
+main { padding: var(--s5) 20px calc(var(--nav-h) + var(--s6) + env(safe-area-inset-bottom)); }
+
+.card { padding: var(--s5); margin-bottom: var(--s4); }
+
+/* o espaço interior do cartão chega: sem margem extra no último elemento nem nas pontas das listas */
+.card > :last-child { margin-bottom: 0; }
+
+.card > .list > li:first-child { padding-top: 0; }
+
+.card > h2, .card > h3 { margin-bottom: var(--s4); }
+
+.card > .list > li:last-child { padding-bottom: 0; }
+
+.card-head { gap: var(--s3); margin-bottom: var(--s4); }
+
+.grid { gap: var(--s4); }
+
+.section-title { margin: var(--s7) 0 var(--s4); }
+
+main > .section-title:first-child { margin-top: 0; }
+
+.stack > * + * { margin-top: var(--s3); }
+
+.list > li { padding: var(--s4) 0; }
+
+label.field { margin-bottom: 20px; }
+
+label.field > span { margin-bottom: var(--s2); }
+
+.check { margin-bottom: var(--s4); }
+
+.notice { padding: var(--s4) 20px; margin-bottom: var(--s4); }
+
+.filters { gap: var(--s2); margin-bottom: var(--s5); }
+
+.tabs { margin-bottom: var(--s5); }
+
+.btn { padding: 12px 22px; }
+
+.btn.small { padding: 7px 14px; }
+
+.modal { padding: var(--s5) 20px calc(var(--s5) + env(safe-area-inset-bottom)); }
+
+.modal-head { margin-bottom: var(--s5); }
+
+.kv { gap: var(--s2) var(--s5); }
+
+.empty { padding: var(--s6) var(--s4) var(--s3); }
+
+.stat { font-size: 2rem; }
+
+.stat-label { margin-top: var(--s1); }
+
+/* etiquetas: texto simples, sem maiúsculas espaçadas */
+.eyebrow { font-size: .875rem; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--muted); margin-bottom: var(--s1); }
+
+.card.dark .eyebrow, .topbar .eyebrow { color: var(--accent); }
+
+.brand-sub { text-transform: none; letter-spacing: 0; font-size: .8125rem; }
+
+th { text-transform: none; letter-spacing: 0; font-size: .8125rem; }
+
+/* estados: um ponto de cor e o texto, sem pílula */
+.chip, .chip.green, .chip.blue, .chip.warn, .chip.accent, .chip.dark,
+.chip.phase-preparar, .chip.phase-integrar, .chip.phase-mudar, .chip.phase-decidir {
+  background: none; padding: 0; border-radius: 0; gap: 6px; font-size: .8125rem; font-weight: 500;
+}
+
+.chip { color: var(--muted); }
+
+.chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: 0 0 auto; }
+
+.chip.green, .chip.accent, .chip.phase-mudar { color: var(--brand); }
+
+.chip.blue, .chip.phase-preparar { color: #285C7D; }
+
+.chip.phase-integrar { color: #1F6A80; }
+
+.chip.warn { color: #A4501F; }
+
+.chip.dark, .chip.phase-decidir { color: var(--ink); }
+
+.card.dark .chip { color: #CFD8C6; }
+
+.card.dark .chip.green, .card.dark .chip.accent, .card.dark .chip.phase-mudar { color: var(--accent); }
+
+@media (min-width: 640px) {
+  .modal { padding: var(--s6); }
+}
+
+@media (min-width: 960px) {
+  main { padding: var(--s7) var(--s7) var(--s8); max-width: 980px; }
+  h1 { font-size: 2.5rem; }
+}
+
+/* =====================================================================
+   Scroll só onde faz sentido
+   ===================================================================== */
+/* ecrãs curtos não deslizam: a margem do cartão do topo deixa de "vazar" para fora da página */
+@media (max-width: 959px) {
+  .app { display: flow-root; }
+}
+
+/* sem deslizar para o lado nem "puxar" a página para os lados */
+html, body { overscroll-behavior-x: none; }
+
+/* separadores: dividem a largura em partes iguais e nunca deslizam; nomes compridos passam a duas linhas */
+.tabs { overflow: hidden; }
+
+.tabs button {
+  flex: 1 1 0; min-width: 0; white-space: normal; line-height: 1.25; text-align: center;
+  padding: 8px 6px; font-size: .875rem; overflow-wrap: anywhere;
+}
+
+/* filtros: passam à linha seguinte em vez de deslizar */
+.filters { flex-wrap: wrap; overflow: visible; }
+
+/* barra de navegação de baixo: arrastar o dedo nela não mexe a página */
+.bottomnav { touch-action: none; }
+
+/* com uma janela aberta, a página por trás fica quieta e o scroll fica dentro da janela */
+body:has(.modal-back) { overflow: hidden; }
+
+.modal { overscroll-behavior: contain; }
+
+/* as tabelas largas continuam a deslizar para o lado no telemóvel (é aí que faz sentido) */
+.table-wrap { overscroll-behavior-x: contain; }

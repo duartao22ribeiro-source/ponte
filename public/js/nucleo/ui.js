@@ -196,8 +196,26 @@ function tabsHTML(key, tabs, def) {
   return `<div class="tabs" role="tablist" data-tabs="${key}">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${k === cur}" class="${k === cur ? 'active' : ''}" data-tab="${k}">${esc(l)}</button>`).join('')}</div>`;
 }
 function bindTabs(root) {
-  $$('[data-tabs]', root).forEach(t => t.addEventListener('click', e => {
-    const b = e.target.closest('[data-tab]'); if (!b) return;
-    S.tab[t.dataset.tabs] = b.dataset.tab; reload();
-  }));
+  S.tabFrom = S.tabFrom || {};
+  $$('[data-tabs]', root).forEach(t => {
+    const key = t.dataset.tabs;
+    placeTabIndicator(t, S.tabFrom[key]);
+    S.tabFrom[key] = null;
+    t.addEventListener('click', e => {
+      const b = e.target.closest('[data-tab]'); if (!b || b.classList.contains('active')) return;
+      const cur = $('[data-tab].active', t);
+      if (cur) S.tabFrom[key] = { x: cur.offsetLeft, w: cur.offsetWidth }; // o indicador parte daqui
+      S.tab[key] = b.dataset.tab;
+      const main = $('#main'); enterMotion(main); reload().then(() => enterMotion(main, true));
+    });
+  });
+}
+// Pastilha que desliza para o separador ativo (css/movimento.css). Como o ecrã é redesenhado
+// ao trocar de separador, parte da posição do separador anterior e anima até ao novo.
+function placeTabIndicator(t, from) {
+  const act = $('[data-tab].active', t); if (!act) return;
+  const set = r => { t.style.setProperty('--tab-x', `${r.x}px`); t.style.setProperty('--tab-w', `${r.w}px`); };
+  t.classList.add('has-indicator');
+  if (from) { t.classList.add('no-anim'); set(from); void t.offsetWidth; t.classList.remove('no-anim'); }
+  set({ x: act.offsetLeft, w: act.offsetWidth });
 }

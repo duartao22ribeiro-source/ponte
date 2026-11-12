@@ -2,30 +2,6 @@
 /* Ponte · hero, entrar e criar conta
    Responsável: Pessoa 1 · Hero e base (ver EQUIPA.md) */
 
-// Paisagem da hero: colinas em camadas, sol e a ponte entre duas encostas.
-function landscape(cls = 'landscape') {
-  return `<svg class="${cls}" viewBox="0 0 1200 360" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-    <defs>
-      <radialGradient id="ls-sun" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F4F1E8" stop-opacity=".55"/><stop offset=".35" stop-color="#F4F1E8" stop-opacity=".16"/><stop offset="1" stop-color="#F4F1E8" stop-opacity="0"/></radialGradient>
-      <linearGradient id="ls-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4888B0"/><stop offset="1" stop-color="#3B6F92"/></linearGradient>
-      <linearGradient id="ls-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#58C0E0"/><stop offset="1" stop-color="#4AA3C2"/></linearGradient>
-      <linearGradient id="ls-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7DCC5D"/><stop offset="1" stop-color="#5E9450"/></linearGradient>
-      <linearGradient id="ls-brand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4C7343"/><stop offset="1" stop-color="#3F6038"/></linearGradient>
-    </defs>
-    <circle class="ls-sun" cx="880" cy="120" r="150" fill="url(#ls-sun)"/>
-    <circle cx="880" cy="120" r="34" fill="#F4F1E8" opacity=".85"/>
-    <path class="ls-l1" d="M-100 170 C80 120 230 150 380 165 S700 110 860 140 S1150 120 1300 150 V360 H-100Z" fill="url(#ls-blue)" opacity=".75"/>
-    <path class="ls-l2" d="M-100 205 C120 170 260 200 420 210 S720 175 900 195 S1160 180 1300 195 V360 H-100Z" fill="url(#ls-sky)" opacity=".9"/>
-    <g class="ls-bridge" fill="none" stroke="#F4F1E8" stroke-linecap="round" opacity=".9">
-      <path d="M430 232 H770" stroke-width="3"/>
-      <path d="M455 262 Q600 150 745 262" stroke-width="2.5"/>
-      <path d="M520 232 V203 M560 232 V184 M600 232 V178 M640 232 V184 M680 232 V203" stroke-width="1.5" opacity=".75"/>
-    </g>
-    <path class="ls-l3" d="M-100 245 C60 220 230 238 420 252 C470 256 450 280 520 290 S760 250 900 238 S1160 222 1300 232 V360 H-100Z" fill="url(#ls-green)"/>
-    <path class="ls-l4" d="M-100 285 C140 262 330 286 540 296 S880 270 1060 280 S1220 276 1300 280 V360 H-100Z" fill="url(#ls-brand)"/>
-    <path class="ls-l5" d="M-100 322 C200 306 420 324 640 328 S1020 312 1300 318 V360 H-100Z" fill="#2B4426"/>
-  </svg>`;
-}
 // Luz suave que segue o cursor na hero (só em ecrãs com rato).
 function bindHeroLight() {
   const hero = $('.auth-hero');
@@ -51,6 +27,32 @@ const DEMO = [
   ['equipa@ruralmove.demo', 'Equipa Rural Move', 'Administração'],
 ];
 
+// ---------- entrar com Google ou Apple (versão de demonstração) ----------
+// Não liga a contas reais: abre uma janela com contas fictícias. No login entra com a escolhida;
+// no registo preenche o nome e o e-mail. Para ligar a sério é preciso configurar OAuth no servidor.
+const SOCIAL = {
+  google: { label: 'Google', icon: '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>' },
+  apple: { label: 'Apple', icon: '<svg viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>' },
+};
+// pessoas fictícias novas, para experimentar o registo
+const DEMO_NEW = [
+  ['ines.carvalho@exemplo.pt', 'Inês Carvalho', ''],
+  ['joao.pires@exemplo.pt', 'João Pires', ''],
+];
+function socialHTML() {
+  return `<div class="social-login">${Object.entries(SOCIAL).map(([k, s]) => `<button type="button" class="btn social ${k}" data-social="${k}">${s.icon}Continuar com ${s.label}</button>`).join('')}</div>
+    <div class="auth-divider"><span>ou com e-mail</span></div>`;
+}
+function bindSocial(accounts, onPick) {
+  $$('[data-social]').forEach(b => b.onclick = () => {
+    const s = SOCIAL[b.dataset.social];
+    openModal(`Continuar com ${s.label}`, `
+      <p class="notice">Demonstração: aqui escolherias a tua conta ${s.label}. Nesta versão usamos contas fictícias da Ponte e não é pedida nenhuma palavra-passe.</p>
+      <ul class="list account-pick">${accounts.map(([e, n, r]) => `<li><button type="button" data-pick="${esc(e)}">${avatar({ name: n }, 40)}<span><b>${esc(n)}</b><span class="small muted">${esc(r || e)}</span></span></button></li>`).join('')}</ul>`,
+    (m, close) => $$('[data-pick]', m).forEach(p => p.onclick = () => { close(); onPick(accounts.find(a => a[0] === p.dataset.pick)); }));
+  });
+}
+
 async function authView() {
   S.shellRole = null;
   document.body.classList.add('auth-page');
@@ -58,38 +60,19 @@ async function authView() {
   document.title = register ? 'Criar conta · Ponte' : 'Entrar · Ponte';
   const hero = `<section class="auth-hero">
       <div class="hero-top">
-        <div class="row" style="gap:12px"><img src="/icons/icon.svg" width="44" height="44" alt="" style="border-radius:12px"><div><div class="brand-name">Ponte</div><div class="brand-sub">Rural Move</div></div></div>
-        <span class="hero-pill glass-edge"><i></i>Ponte para a Fixação</span>
+        <div class="row" style="gap:12px"><img src="/icons/ponte.svg" width="44" height="44" alt=""><div><div class="brand-name">Ponte</div><div class="brand-sub">Rural Move</div></div></div>
       </div>
       <div class="hero-copy">
         <h1>Da primeira estadia <em>à decisão de ficar.</em></h1>
         <p>Um anfitrião que vive na aldeia acompanha-te antes de chegares, durante a estadia e até seis meses depois.</p>
-        <ol class="hero-steps">${PHASES.map((ph, i) => `<li><b>0${i + 1}</b>${esc(ph.label)}</li>`).join('')}</ol>
         <button type="button" class="btn hero-cta" data-to-form>${register ? 'Criar conta' : 'Entrar'} <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
       </div>
-      <span class="orb o1" aria-hidden="true"></span><span class="orb o2" aria-hidden="true"></span><span class="orb o3" aria-hidden="true"></span>
-      <div class="hero-chat glass-edge sheen" aria-hidden="true">
-        <div class="row" style="gap:10px"><span class="avatar" style="width:32px;height:32px;font-size:.75rem">LF</span><div><b>Leonor</b><div class="small">Anfitriã · Sendim</div></div></div>
-        <p>Bem-vinda a Sendim! Amanhã há feira no largo, passo aí às 10h.</p>
-      </div>
-      <div class="hero-peek glass-edge sheen" aria-hidden="true">
-        <div class="row between"><span class="small">Plano de mudança</span><span class="chip phase-mudar">Mudar</span></div>
-        <div class="peek-num">44%</div>
-        <div class="progress thin"><i style="width:44%"></i></div>
-        <div class="peek-row"><span class="peek-dot"></span>Próxima: entrevista na cooperativa</div>
-        <div class="peek-row"><span class="peek-dot blue"></span>Visita de regresso confirmada</div>
-      </div>
-      <dl class="hero-stats glass-edge sheen">
-        <div><dt>2 a 4</dt><dd>semanas a viver na aldeia</dd></div>
-        <div><dt>6</dt><dd>meses de acompanhamento</dd></div>
-        <div><dt>1</dt><dd>anfitrião local contigo</dd></div>
-      </dl>
-      ${landscape('landscape hero-land')}
     </section>`;
 
   if (!register) {
     $('#root').innerHTML = `<div class="auth">${hero}<section class="auth-body">
       <h2>Entrar</h2>
+      ${socialHTML()}
       <form id="login" novalidate>
         <div class="form-error hidden" role="alert"></div>
         <label class="field"><span>E-mail</span><input type="email" name="email" autocomplete="email" required></label>
@@ -112,6 +95,7 @@ async function authView() {
     };
     form.onsubmit = e => { e.preventDefault(); doLogin(form.email.value, form.password.value); };
     $$('[data-demo]').forEach(b => b.onclick = () => { form.email.value = b.dataset.demo; form.password.value = 'ponte2026'; doLogin(b.dataset.demo, 'ponte2026'); });
+    bindSocial(DEMO, ([email]) => doLogin(email, 'ponte2026'));
     return;
   }
 
@@ -121,6 +105,7 @@ async function authView() {
     <a href="#/entrar" class="btn ghost small" style="margin-left:-10px">${ICON.back.replace('<svg', '<svg width="18" height="18"')} Voltar</a>
     <h2 style="margin-top:8px">Criar conta</h2>
     <p class="muted">Usa o e-mail com que te inscreveste na Rural Experience.</p>
+    ${socialHTML()}
     <form id="reg" novalidate>
       <div class="form-error hidden" role="alert"></div>
       <label class="field"><span>Nome</span><input name="name" autocomplete="name" required></label>
@@ -145,6 +130,7 @@ async function authView() {
     </form></section></div>`;
   bindHeroLight();
   const form = $('#reg');
+  bindSocial(DEMO_NEW, ([email, name]) => { form.elements.name.value = name; form.elements.email.value = email; form.elements.password.focus(); toast('Nome e e-mail preenchidos. Escolhe uma palavra-passe.'); });
   form.onsubmit = async e => {
     e.preventDefault();
     const err = $('.form-error', form);

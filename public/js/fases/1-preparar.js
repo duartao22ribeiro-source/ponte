@@ -6,7 +6,7 @@
 async function pPreparar(main) {
   const d = await overview();
   const e = d.enrollment;
-  setHero('Preparar', e.arrival ? `Chegada a ${fmtWeekday(e.arrival)}` : e.edition_name, 'Fase 1 · Semana antes');
+  setHero('Preparar', e.arrival ? `Chegada a ${fmtWeekday(e.arrival)}` : e.edition_name);
   const tab = tabsHTML('preparar', [['destino', 'Ficha do destino'], ['anfitriao', 'Anfitrião'], ['embaixadores', 'Embaixadores']]);
   let body = '';
 
