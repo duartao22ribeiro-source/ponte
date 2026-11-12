@@ -1,0 +1,16 @@
+# dependências e ficheiros gerados
+node_modules/
+.vercel/
+
+# base de dados local (é criada sozinha com os dados de demonstração)
+ponte.db
+ponte.db-*
+*.db-journal
+
+# sistema e editores
+.DS_Store
+*.log
+.env
+.env.*
+.idea/
+.vscode/

@@ -1,0 +1,16 @@
+{
+  "name": "Ponte · Rural Move",
+  "short_name": "Ponte",
+  "description": "Ponte para a Fixação: o teu anfitrião local, da primeira estadia até à decisão de ficar.",
+  "lang": "pt-PT",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F4F1E8",
+  "theme_color": "#24361F",
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

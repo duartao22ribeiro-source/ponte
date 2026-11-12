@@ -1,0 +1,13 @@
+{
+  "name": "ponte-rural-move",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ponte para a Fixação: PWA de acompanhamento para participantes, anfitriões e equipa da Rural Move.",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "start": "node lib/ponte.js",
+    "reset": "rm -f ponte.db && node lib/ponte.js"
+  }
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ponte · Rural Move</title>
+  <meta name="description" content="Ponte para a Fixação: o teu anfitrião local, da primeira estadia até à decisão de ficar.">
+  <meta name="theme-color" content="#24361F">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500&family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <!-- Estilos: a base primeiro, a hero no fim (a ordem importa). Ver EQUIPA.md para quem mexe em quê. -->
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/fases/1-preparar.css">
+  <link rel="stylesheet" href="/css/fases/2-integrar.css">
+  <link rel="stylesheet" href="/css/fases/3-mudar.css">
+  <link rel="stylesheet" href="/css/fases/4-decidir.css">
+  <link rel="stylesheet" href="/css/anfitriao.css">
+  <link rel="stylesheet" href="/css/equipa.css">
+  <link rel="stylesheet" href="/css/hero.css">
+</head>
+<body>
+  <div id="root"><div class="loading"><div class="spinner"></div>A carregar…</div></div>
+  <!-- Scripts por ordem: núcleo → hero → fases → anfitrião → equipa → main.js (arranque, sempre o último). -->
+  <script defer src="/js/nucleo/estado.js"></script>
+  <script defer src="/js/nucleo/ui.js"></script>
+  <script defer src="/js/nucleo/router.js"></script>
+  <script defer src="/js/nucleo/perfil.js"></script>
+  <script defer src="/js/hero/entrada.js"></script>
+  <script defer src="/js/participante/inicio.js"></script>
+  <script defer src="/js/fases/1-preparar.js"></script>
+  <script defer src="/js/fases/2-integrar.js"></script>
+  <script defer src="/js/fases/2-conversa.js"></script>
+  <script defer src="/js/fases/3-mudar.js"></script>
+  <script defer src="/js/fases/4-decidir.js"></script>
+  <script defer src="/js/anfitriao/painel.js"></script>
+  <script defer src="/js/anfitriao/territorio.js"></script>
+  <script defer src="/js/equipa/gestao.js"></script>
+  <script defer src="/js/equipa/indicadores.js"></script>
+  <script defer src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+# Responsáveis por cada área (ver EQUIPA.md).
+# O GitHub pede revisão automática ao responsável em cada Pull Request.
+
+# Pessoa 1 · Hero e base (e todos os ficheiros partilhados)
+*                                   @duartao22ribeiro-source
+
+# Pessoa 2 · Fases 1 e 2 (Preparar e Integrar)
+/public/js/fases/1-preparar.js      @diogopsilva1102-bit
+/public/js/fases/2-integrar.js      @diogopsilva1102-bit
+/public/js/fases/2-conversa.js      @diogopsilva1102-bit
+/public/css/fases/1-preparar.css    @diogopsilva1102-bit
+/public/css/fases/2-integrar.css    @diogopsilva1102-bit
+/public/js/anfitriao/territorio.js  @diogopsilva1102-bit
+/public/js/equipa/gestao.js         @diogopsilva1102-bit
+/lib/rotas/preparar.js              @diogopsilva1102-bit
+/lib/rotas/integrar.js              @diogopsilva1102-bit
+/lib/rotas/territorio.js            @diogopsilva1102-bit
+/lib/rotas/equipa-gestao.js         @diogopsilva1102-bit
+
+# Pessoa 3 · Fases 3 e 4 (Mudar e Decidir)
+/public/js/fases/3-mudar.js         @rodrigopol27
+/public/js/fases/4-decidir.js       @rodrigopol27
+/public/css/fases/3-mudar.css       @rodrigopol27
+/public/css/fases/4-decidir.css     @rodrigopol27
+/public/js/anfitriao/painel.js      @rodrigopol27
+/public/css/anfitriao.css           @rodrigopol27
+/public/js/equipa/indicadores.js    @rodrigopol27
+/public/css/equipa.css              @rodrigopol27
+/lib/rotas/mudar.js                 @rodrigopol27
+/lib/rotas/decidir.js               @rodrigopol27
+/lib/rotas/anfitriao.js             @rodrigopol27
+/lib/rotas/equipa-indicadores.js    @rodrigopol27

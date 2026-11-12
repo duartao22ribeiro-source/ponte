@@ -1,0 +1,46 @@
+/* Ponte · plano de mudança e casas
+   Responsável: Pessoa 3 · Fases 3 e 4 (Mudar e Decidir) (ver EQUIPA.md) */
+
+/* casas */
+.house { padding: 0; overflow: hidden; }
+
+.house .ph { aspect-ratio: 16/9; background: var(--soft); display: block; width: 100%; object-fit: cover; }
+
+.house .body { padding: 16px 18px 18px; }
+
+.price { font-family: var(--title); font-size: 1.2rem; }
+
+/* plano */
+.area { margin-bottom: 18px; }
+
+.area-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+
+.area-head h3 { margin: 0; }
+
+.task {
+  display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; background: #fff; border: 1px solid var(--line);
+  border-radius: var(--radius-sm); margin-bottom: 8px;
+}
+
+.task.feito .task-title { text-decoration: line-through; color: var(--muted); }
+
+.status-btn {
+  flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--line); background: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; padding: 0; margin-top: 1px;
+}
+
+.status-btn.em_curso { border-color: var(--blue); background: conic-gradient(var(--blue) 0 50%, #fff 50% 100%); }
+
+.status-btn.feito { border-color: var(--brand); background: var(--brand); color: #fff; }
+
+.status-btn svg { width: 14px; height: 14px; }
+
+.task-main { flex: 1; min-width: 0; }
+
+.task-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; font-size: .8rem; color: var(--muted); }
+
+.task-notes { font-size: .85rem; color: var(--muted); margin-top: 4px; white-space: pre-line; }
+
+.task { background: rgba(255, 255, 255, .55); border-color: var(--glass-line); }
+
+.status-btn { background: rgba(255, 255, 255, .8); border-color: rgba(36, 54, 31, .15); }

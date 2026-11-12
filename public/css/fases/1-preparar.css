@@ -1,0 +1,6 @@
+/* Ponte · ficha do destino
+   Responsável: Pessoa 2 · Fases 1 e 2 (Preparar e Integrar) (ver EQUIPA.md) */
+
+.speed { display: flex; align-items: baseline; gap: 6px; }
+
+.speed .stat { font-size: 2.6rem; }

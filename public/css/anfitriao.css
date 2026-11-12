@@ -1,0 +1,13 @@
+/* Ponte · painel do anfitrião
+   Responsável: Pessoa 3 · Fases 3 e 4 (Mudar e Decidir) (ver EQUIPA.md) */
+
+/* participante (painel anfitrião) */
+.pcard { display: flex; gap: 14px; align-items: center; text-decoration: none; color: inherit; }
+
+.pcard .pmain { flex: 1; min-width: 0; }
+
+.pcard .pname { font-family: var(--title); font-size: 1rem; }
+
+.alert-card { border-left: 4px solid var(--warn); }
+
+.alert-card { border-left: 1px solid var(--glass-line); box-shadow: var(--shadow), inset 3px 0 0 var(--warn); }

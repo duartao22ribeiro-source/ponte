@@ -1,0 +1,17 @@
+/* Ponte · opções de decisão
+   Responsável: Pessoa 3 · Fases 3 e 4 (Mudar e Decidir) (ver EQUIPA.md) */
+
+.options { display: grid; gap: 10px; }
+
+.option {
+  display: flex; gap: 12px; align-items: flex-start; padding: 16px; border-radius: var(--radius); border: 1.5px solid var(--line);
+  background: #fff; cursor: pointer;
+}
+
+.option:has(input:checked) { border-color: var(--brand); background: #F3F9EE; }
+
+.option strong { display: block; font-family: var(--title); font-weight: 400; margin-bottom: 2px; }
+
+.option { background: rgba(255, 255, 255, .55); border: 1px solid var(--glass-line); }
+
+.option:has(input:checked) { background: rgba(243, 249, 238, .85); border-color: rgba(63, 96, 56, .45); }

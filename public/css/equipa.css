@@ -1,0 +1,13 @@
+/* Ponte · relatório (ecrã e impressão)
+   Responsável: Pessoa 3 · Fases 3 e 4 (Mudar e Decidir) (ver EQUIPA.md) */
+
+/* ---------- impressão (relatório PDF) ---------- */
+.report { background: #fff; color: #111; }
+
+.report-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; border-bottom: 3px solid var(--dark); padding-bottom: 14px; margin-bottom: 18px; }
+
+.report table td, .report table th { border-bottom: 1px solid #ddd; }
+
+@media print {
+  .report { font-size: 11pt; }
+}
