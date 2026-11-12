@@ -1,4 +1,3 @@
-https://ponte-rural-move.vercel.app/#/
 
 
 # Ponte · Rural Move
