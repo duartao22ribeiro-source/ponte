@@ -71,19 +71,32 @@ async function eIndicadores(main) {
 
 async function eTestemunhos(main) {
   const d = await api('/api/e/testimonials');
-  const pending = d.testimonials.filter(t => t.status === 'pendente');
-  setHero('Testemunhos', `${pending.length} por aprovar`, 'Equipa Rural Move');
-  const tab = tabsHTML('etm', [['pendentes', `Por aprovar (${pending.length})`], ['todos', 'Todos'], ['pedidos', `Pedidos de conversa (${d.requests.filter(r => r.status === 'pedido').length})`]]);
+  // Filtro por território. Um testemunho sem território aparece a todos os participantes,
+  // por isso entra em qualquer filtro: a equipa vê o mesmo que vê quem vai para esse território.
+  if (!d.territories.some(t => String(t.id) === S.tab.etmTerr)) S.tab.etmTerr = 'todos';
+  const terr = S.tab.etmTerr;
+  const inTerr = id => terr === 'todos' || id == null || String(id) === terr;
+  const tms = d.testimonials.filter(t => inTerr(t.territory_id));
+  const reqs = d.requests.filter(r => inTerr(r.territory_id));
+  const pending = tms.filter(t => t.status === 'pendente');
+  const terrName = terr === 'todos' ? '' : d.territories.find(t => String(t.id) === terr).name;
+  setHero('Testemunhos', `${pending.length} por aprovar${terrName ? ` em ${terrName}` : ''}`, 'Equipa Rural Move');
+  const pendingIn = id => d.testimonials.filter(t => t.status === 'pendente' && (t.territory_id == null || t.territory_id === id)).length;
+  const filter = d.territories.length > 1 ? `<div class="filters" data-filter="etmTerr" aria-label="Filtrar por território">${[['todos', 'Todos os territórios'], ...d.territories.map(t => [String(t.id), t.name, pendingIn(t.id)])]
+    .map(([k, l, n]) => `<button data-f="${k}" class="${terr === k ? 'active' : ''}" aria-pressed="${terr === k}">${esc(l)}${n ? ` · ${n}` : ''}</button>`).join('')}</div>` : '';
+  const tab = tabsHTML('etm', [['pendentes', `Por aprovar (${pending.length})`], ['todos', `Todos (${tms.length})`], ['pedidos', `Pedidos de conversa (${reqs.filter(r => r.status === 'pedido').length})`]]);
   let body = '';
-  const card = t => `<div class="card"><div class="row between"><div><b>${esc(t.author_name)}</b><div class="small muted">${esc(t.author_role || '')}${t.territory_name ? ` · ${esc(t.territory_name)}` : ''} · ${fmtDate(t.created_at)}</div></div>${chip(t.status)}</div>
+  const where = t => t.territory_name ? esc(t.territory_name) : 'Todos os territórios';
+  const card = t => `<div class="card"><div class="row between"><div><b>${esc(t.author_name)}</b><div class="small muted">${esc(t.author_role || '')}${t.author_role ? ' · ' : ''}${where(t)} · ${fmtDate(t.created_at)}</div></div>${chip(t.status)}</div>
     <p class="quote" style="margin-top:12px">${esc(t.body)}</p>
     <div class="row">${t.status !== 'aprovado' ? `<button class="btn small" data-st="${t.id}" data-v="aprovado">Aprovar</button>` : ''}${t.status !== 'rejeitado' ? `<button class="btn danger small" data-st="${t.id}" data-v="rejeitado">${t.status === 'aprovado' ? 'Despublicar' : 'Rejeitar'}</button>` : ''}<button class="btn ghost small" data-edit="${t.id}">Editar texto</button></div></div>`;
   if (S.tab.etm === 'pendentes') body = pending.map(card).join('') || `<div class="card">${emptyState('Não há testemunhos por aprovar.')}</div>`;
-  if (S.tab.etm === 'todos') body = d.testimonials.map(card).join('');
-  if (S.tab.etm === 'pedidos') body = `<p class="small muted">Participantes que pediram para falar com um embaixador. Põe-nos em contacto e atualiza o estado.</p><div class="card"><ul class="list">${d.requests.map(r => `<li><div class="row between"><div><b>${esc(r.requester)}</b> quer falar com <b>${esc(r.author_name)}</b>
+  if (S.tab.etm === 'todos') body = tms.map(card).join('') || `<div class="card">${emptyState(terrName ? `Ainda não há testemunhos de ${esc(terrName)}.` : 'Ainda não há testemunhos.')}</div>`;
+  if (S.tab.etm === 'pedidos') body = `<p class="small muted">Participantes que pediram para falar com um embaixador. Põe-nos em contacto e atualiza o estado.</p><div class="card"><ul class="list">${reqs.map(r => `<li><div class="row between"><div><b>${esc(r.requester)}</b> quer falar com <b>${esc(r.author_name)}</b>
     <div class="small muted">${esc(r.requester_email)} · ${fmtDate(r.created_at)}</div>${r.message ? `<div class="small" style="margin-top:4px">"${esc(r.message)}"</div>` : ''}</div>
     <select data-req="${r.id}" style="width:auto;min-height:38px">${['pedido', 'marcado', 'concluido'].map(s => `<option value="${s}" ${r.status === s ? 'selected' : ''}>${STATUS_LABEL[s]}</option>`).join('')}</select></div></li>`).join('') || `<li>${emptyState('Sem pedidos.')}</li>`}</ul></div>`;
-  main.innerHTML = tab + body;
+  main.innerHTML = filter + tab + body;
+  $$('[data-filter]', main).forEach(fl => fl.onclick = ev => { const b = ev.target.closest('[data-f]'); if (b) { S.tab[fl.dataset.filter] = b.dataset.f; reload(); } });
   $$('[data-st]', main).forEach(b => b.onclick = () => act(() => api(`/api/e/testimonials/${b.dataset.st}`, { method: 'PUT', body: { status: b.dataset.v } }), b.dataset.v === 'aprovado' ? 'Testemunho publicado.' : 'Testemunho rejeitado.'));
   $$('[data-edit]', main).forEach(b => b.onclick = () => {
     const t = d.testimonials.find(x => x.id === Number(b.dataset.edit));
